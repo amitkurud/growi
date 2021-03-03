@@ -11,6 +11,7 @@ import StatusTable from './StatusTable';
 import ReconnectControls from './ReconnectControls';
 import NormalizeIndicesControls from './NormalizeIndicesControls';
 import RebuildIndexControls from './RebuildIndexControls';
+import SlackBotSettings from './SlackBotSettings';
 
 class ElasticsearchManagement extends React.Component {
 
@@ -212,6 +213,16 @@ class ElasticsearchManagement extends React.Component {
               isNormalized={isNormalized}
               onRebuildingRequested={this.rebuildIndices}
             />
+
+          </div>
+        </div>
+
+        <hr />
+
+        <div className="row">
+          <label className="col-md-3 col-form-label text-left text-md-right">Slack Bot</label>
+          <div className="col-md-6">
+            <SlackBotSettings />
           </div>
         </div>
 
