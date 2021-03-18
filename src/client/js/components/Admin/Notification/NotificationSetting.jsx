@@ -54,7 +54,6 @@ function NotificationSetting(props) {
     return {
       slack_configuration: {
         Icon: () => <i className="icon-settings" />,
-        // i18n: 'Slack configuration',
         i18n: 'Slack Incoming Webhooks',
         index: 0,
       },

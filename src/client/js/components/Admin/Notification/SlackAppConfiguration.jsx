@@ -41,28 +41,8 @@ class SlackAppConfiguration extends React.Component {
       <React.Fragment>
         <div className="row my-3">
           <div className="col-6 text-left">
-            {/* <div className="dropdown">
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="true"
-              >
-                {`Slack ${adminNotificationContainer.state.selectSlackOption}`}
-              </button>
-              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button className="dropdown-item" type="button" onClick={() => adminNotificationContainer.switchSlackOption('Incoming Webhooks')}>
-                  Slack Incoming Webhooks
-                </button>
-                <button className="dropdown-item" type="button" onClick={() => adminNotificationContainer.switchSlackOption('App')}>Slack App</button>
-              </div>
-            </div> */}
           </div>
         </div>
-        {/* {adminNotificationContainer.state.selectSlackOption === 'Incoming Webhooks' ? ( */}
-        {/* <React.Fragment> */}
         <h2 className="border-bottom mb-5">{t('notification_setting.slack_incoming_configuration')}</h2>
 
         <div className="row mb-3">
@@ -96,42 +76,6 @@ class SlackAppConfiguration extends React.Component {
             </p>
           </div>
         </div>
-        {/* </React.Fragment> */}
-        {/* )
-          : (
-            <React.Fragment> */}
-        {/* <h2 className="border-bottom mb-5">{t('notification_setting.slack_app_configuration')}</h2>
-
-              <div className="well card">
-                <span className="text-danger"><i className="icon-fw icon-exclamation"></i>NOT RECOMMENDED</span>
-                <br /> */}
-        {/* eslint-disable-next-line react/no-danger */}
-        {/* <span dangerouslySetInnerHTML={{ __html: t('notification_setting.slack_app_configuration_desc') }} />
-                <br />
-                <a
-                  href="#slack-incoming-webhooks"
-                  data-toggle="tab"
-                  onClick={() => adminNotificationContainer.switchSlackOption('Incoming Webhooks')}
-                >
-                  {t('notification_setting.use_instead')}
-                </a>
-              </div> */}
-
-        {/* <div className="row mb-5">
-                <label className="col-md-3 text-left text-md-right">OAuth access token</label>
-                <div className="col-md-6">
-                  <input
-                    className="form-control"
-                    type="text"
-                    defaultValue={adminNotificationContainer.state.slackToken || ''}
-                    onChange={e => adminNotificationContainer.changeSlackToken(e.target.value)}
-                  />
-                </div>
-              </div> */}
-
-        {/* </React.Fragment>
-          )
-        } */}
 
         <AdminUpdateButtonRow
           onClick={this.onClickSubmit}
