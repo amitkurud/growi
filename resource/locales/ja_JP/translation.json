@@ -708,6 +708,7 @@
     }
   },
   "notification_setting": {
+    "slack_incoming_webhook": "Slack Incoming Webhooks",
     "slack_incoming_configuration": "Slack Incoming Webhooks 設定",
     "prioritize_webhook": "Slack アプリより Incoming Webhook を優先する",
     "prioritize_webhook_desc": "このオプションをオンにすると、 Slack App が有効になっていても GROWI は Incoming Webhook を使用します。",

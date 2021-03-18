@@ -15,7 +15,7 @@ export default class AdminNotificationContainer extends Container {
 
     this.state = {
       retrieveError: null,
-      selectSlackOption: 'Incoming Webhooks',
+      // selectSlackOption: 'Incoming Webhooks',
       webhookUrl: this.dummyWebhookUrl,
       isIncomingWebhookPrioritized: false,
       slackToken: '',
@@ -55,9 +55,9 @@ export default class AdminNotificationContainer extends Container {
   /**
    * Switch slackOption
    */
-  switchSlackOption(slackOption) {
-    this.setState({ selectSlackOption: slackOption });
-  }
+  // switchSlackOption(slackOption) {
+  //   this.setState({ selectSlackOption: slackOption });
+  // }
 
   /**
    * Change webhookUrl
@@ -76,9 +76,9 @@ export default class AdminNotificationContainer extends Container {
   /**
    * Change slackToken
    */
-  changeSlackToken(slackToken) {
-    this.setState({ slackToken });
-  }
+  // changeSlackToken(slackToken) {
+  //   this.setState({ slackToken });
+  // }
 
   /**
    * Update slackAppConfiguration

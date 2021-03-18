@@ -41,7 +41,7 @@ class SlackAppConfiguration extends React.Component {
       <React.Fragment>
         <div className="row my-3">
           <div className="col-6 text-left">
-            <div className="dropdown">
+            {/* <div className="dropdown">
               <button
                 className="btn btn-secondary dropdown-toggle"
                 type="button"
@@ -58,55 +58,55 @@ class SlackAppConfiguration extends React.Component {
                 </button>
                 <button className="dropdown-item" type="button" onClick={() => adminNotificationContainer.switchSlackOption('App')}>Slack App</button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
-        {adminNotificationContainer.state.selectSlackOption === 'Incoming Webhooks' ? (
-          <React.Fragment>
-            <h2 className="border-bottom mb-5">{t('notification_setting.slack_incoming_configuration')}</h2>
+        {/* {adminNotificationContainer.state.selectSlackOption === 'Incoming Webhooks' ? ( */}
+        {/* <React.Fragment> */}
+        <h2 className="border-bottom mb-5">{t('notification_setting.slack_incoming_configuration')}</h2>
 
-            <div className="row mb-3">
-              <label className="col-md-3 text-left text-md-right">Webhook URL</label>
-              <div className="col-md-6">
-                <input
-                  className="form-control"
-                  type="text"
-                  defaultValue={adminNotificationContainer.state.webhookUrl || ''}
-                  onChange={e => adminNotificationContainer.changeWebhookUrl(e.target.value)}
-                />
-              </div>
-            </div>
+        <div className="row mb-3">
+          <label className="col-md-3 text-left text-md-right">Webhook URL</label>
+          <div className="col-md-6">
+            <input
+              className="form-control"
+              type="text"
+              defaultValue={adminNotificationContainer.state.webhookUrl || ''}
+              onChange={e => adminNotificationContainer.changeWebhookUrl(e.target.value)}
+            />
+          </div>
+        </div>
 
-            <div className="row mb-3">
-              <div className="offset-md-3 col-md-6 text-left">
-                <div className="custom-control custom-checkbox custom-checkbox-success">
-                  <input
-                    type="checkbox"
-                    className="custom-control-input"
-                    id="cbPrioritizeIWH"
-                    checked={adminNotificationContainer.state.isIncomingWebhookPrioritized || false}
-                    onChange={() => { adminNotificationContainer.switchIsIncomingWebhookPrioritized() }}
-                  />
-                  <label className="custom-control-label" htmlFor="cbPrioritizeIWH">
-                    {t('notification_setting.prioritize_webhook')}
-                  </label>
-                </div>
-                <p className="form-text text-muted">
-                  {t('notification_setting.prioritize_webhook_desc')}
-                </p>
-              </div>
+        <div className="row mb-3">
+          <div className="offset-md-3 col-md-6 text-left">
+            <div className="custom-control custom-checkbox custom-checkbox-success">
+              <input
+                type="checkbox"
+                className="custom-control-input"
+                id="cbPrioritizeIWH"
+                checked={adminNotificationContainer.state.isIncomingWebhookPrioritized || false}
+                onChange={() => { adminNotificationContainer.switchIsIncomingWebhookPrioritized() }}
+              />
+              <label className="custom-control-label" htmlFor="cbPrioritizeIWH">
+                {t('notification_setting.prioritize_webhook')}
+              </label>
             </div>
-          </React.Fragment>
-        )
+            <p className="form-text text-muted">
+              {t('notification_setting.prioritize_webhook_desc')}
+            </p>
+          </div>
+        </div>
+        {/* </React.Fragment> */}
+        {/* )
           : (
-            <React.Fragment>
-              <h2 className="border-bottom mb-5">{t('notification_setting.slack_app_configuration')}</h2>
+            <React.Fragment> */}
+        {/* <h2 className="border-bottom mb-5">{t('notification_setting.slack_app_configuration')}</h2>
 
               <div className="well card">
                 <span className="text-danger"><i className="icon-fw icon-exclamation"></i>NOT RECOMMENDED</span>
-                <br />
-                {/* eslint-disable-next-line react/no-danger */}
-                <span dangerouslySetInnerHTML={{ __html: t('notification_setting.slack_app_configuration_desc') }} />
+                <br /> */}
+        {/* eslint-disable-next-line react/no-danger */}
+        {/* <span dangerouslySetInnerHTML={{ __html: t('notification_setting.slack_app_configuration_desc') }} />
                 <br />
                 <a
                   href="#slack-incoming-webhooks"
@@ -115,9 +115,9 @@ class SlackAppConfiguration extends React.Component {
                 >
                   {t('notification_setting.use_instead')}
                 </a>
-              </div>
+              </div> */}
 
-              <div className="row mb-5">
+        {/* <div className="row mb-5">
                 <label className="col-md-3 text-left text-md-right">OAuth access token</label>
                 <div className="col-md-6">
                   <input
@@ -127,11 +127,11 @@ class SlackAppConfiguration extends React.Component {
                     onChange={e => adminNotificationContainer.changeSlackToken(e.target.value)}
                   />
                 </div>
-              </div>
+              </div> */}
 
-            </React.Fragment>
+        {/* </React.Fragment>
           )
-        }
+        } */}
 
         <AdminUpdateButtonRow
           onClick={this.onClickSubmit}
