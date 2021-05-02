@@ -1,7 +1,39 @@
 # CHANGES
 
-## v4.2.14-RC
+## v4.2.17-RC
 
+* Improvement: Invoke garbage collection when reindex all pages by elasticsearch
+* Improvement: Hide Sidebar at shared pages
+* Fix: No unsaved alert is displayed without difference the latest markdown and editor value
+
+## v4.2.16-RC
+
+* Fix: "Only inside the group" causes an error
+    * Introduced by v4.2.15
+
+## v4.2.15
+
+* Improvement: toastr location for editing
+* Improvement: Handsontable with static backdrop to prevent from closing when backdrop is clicked
+* Fix: Accept invalid page path like `..%2f`
+* Fix: Pages updated date is corrupted after recursive operation
+    * Introduced by v4.2.8
+* Support: Upgrade libs
+    * reactstrap
+
+
+
+## v4.2.14
+
+* Feature: Add an option to restrict publishing email property for new users
+* Improvement: Invite modal in admin page without email server settings
+* Improvement: Global notification settings in admin page without email server settings
+* Fix: Can create pages on the share route
+    * Introduced by v4.2.8
+* Fix: Pages restrected by group are excluded for recurrence operation
+    * Introduced by v4.2.8
+* Fix: Rename and duplicate to descendants path does not work correctly
+    * Introduced by v4.2.8
 * Support: Update libs
     * bunyan
     * browser-bunyan
@@ -76,6 +108,7 @@
 ## v4.2.5
 
 * Improvement: Invoke garbage collection when reindex all pages by elasticsearch
+    * Turned out not working -- 2021.05.01
 * Fix: MathJax rendering does not work
 
 ## v4.2.4

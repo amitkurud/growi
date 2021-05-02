@@ -5,6 +5,7 @@ const debug = require('debug')('growi:models:page');
 const { Writable } = require('stream');
 const { createBatchStream } = require('@server/util/batch-stream');
 const { isTrashPage } = require('@commons/util/path-utils');
+const streamToPromise = require('stream-to-promise');
 const { serializePageSecurely } = require('../models/serializers/page-serializer');
 
 const BULK_REINDEX_SIZE = 100;
@@ -57,6 +58,10 @@ class PageService {
     // sanitize path
     newPagePath = this.crowi.xss.process(newPagePath); // eslint-disable-line no-param-reassign
 
+    if (isRecursively) {
+      await this.renameDescendantsWithStream(page, newPagePath, user, options);
+    }
+
     const update = {};
     // update Page
     update.path = newPagePath;
@@ -72,10 +77,6 @@ class PageService {
     if (createRedirectPage) {
       const body = `redirect ${newPagePath}`;
       await Page.create(path, body, user, { redirectTo: newPagePath });
-    }
-
-    if (isRecursively) {
-      this.renameDescendantsWithStream(page, newPagePath, user, options);
     }
 
     this.pageEvent.emit('delete', page, user, socketClientId);
@@ -102,7 +103,9 @@ class PageService {
       const revisionId = new mongoose.Types.ObjectId();
 
       if (updateMetadata) {
-        unorderedBulkOp.find({ _id: page._id }).update({ $set: { path: newPagePath, lastUpdateUser: user._id, updatedAt:  Date.now() } });
+        unorderedBulkOp
+          .find({ _id: page._id })
+          .update({ $set: { path: newPagePath, lastUpdateUser: user._id, updatedAt: new Date() } });
       }
       else {
         unorderedBulkOp.find({ _id: page._id }).update({ $set: { path: newPagePath } });
@@ -141,6 +144,9 @@ class PageService {
    */
   async renameDescendantsWithStream(targetPage, newPagePath, user, options = {}) {
     const Page = this.crowi.model('Page');
+    const UserGroupRelation = this.crowi.model('UserGroupRelation');
+
+    const userGroups = await UserGroupRelation.findAllUserGroupIdsRelatedToUser(user);
     const newPagePathPrefix = newPagePath;
     const { PageQueryBuilder } = Page;
     const pathRegExp = new RegExp(`^${escapeStringRegexp(targetPage.path)}`, 'i');
@@ -148,7 +154,7 @@ class PageService {
     const readStream = new PageQueryBuilder(Page.find())
       .addConditionToExcludeRedirect()
       .addConditionToListOnlyDescendants(targetPage.path)
-      .addConditionToFilteringByViewer(user)
+      .addConditionToFilteringByViewer(user, userGroups)
       .query
       .lean()
       .cursor({ batchSize: BULK_REINDEX_SIZE });
@@ -182,6 +188,8 @@ class PageService {
     readStream
       .pipe(createBatchStream(BULK_REINDEX_SIZE))
       .pipe(writeStream);
+
+    return streamToPromise(writeStream);
   }
 
 
@@ -234,13 +242,13 @@ class PageService {
 
     newPagePath = this.crowi.xss.process(newPagePath); // eslint-disable-line no-param-reassign
 
+    if (isRecursively) {
+      await this.duplicateDescendantsWithStream(page, newPagePath, user);
+    }
+
     const createdPage = await Page.create(
       newPagePath, page.revision.body, user, options,
     );
-
-    if (isRecursively) {
-      this.duplicateDescendantsWithStream(page, newPagePath, user);
-    }
 
     // take over tags
     const originTags = await page.findRelatedTagsById();
@@ -342,6 +350,9 @@ class PageService {
 
   async duplicateDescendantsWithStream(page, newPagePath, user) {
     const Page = this.crowi.model('Page');
+    const UserGroupRelation = this.crowi.model('UserGroupRelation');
+
+    const userGroups = await UserGroupRelation.findAllUserGroupIdsRelatedToUser(user);
     const newPagePathPrefix = newPagePath;
     const pathRegExp = new RegExp(`^${escapeStringRegexp(page.path)}`, 'i');
 
@@ -350,7 +361,7 @@ class PageService {
     const readStream = new PageQueryBuilder(Page.find())
       .addConditionToExcludeRedirect()
       .addConditionToListOnlyDescendants(page.path)
-      .addConditionToFilteringByViewer(user)
+      .addConditionToFilteringByViewer(user, userGroups)
       .query
       .lean()
       .cursor({ batchSize: BULK_REINDEX_SIZE });
@@ -385,6 +396,7 @@ class PageService {
       .pipe(createBatchStream(BULK_REINDEX_SIZE))
       .pipe(writeStream);
 
+    return streamToPromise(writeStream);
   }
 
 
@@ -480,12 +492,15 @@ class PageService {
    */
   async deleteDescendantsWithStream(targetPage, user, options = {}) {
     const Page = this.crowi.model('Page');
+    const UserGroupRelation = this.crowi.model('UserGroupRelation');
+
+    const userGroups = await UserGroupRelation.findAllUserGroupIdsRelatedToUser(user);
     const { PageQueryBuilder } = Page;
 
     const readStream = new PageQueryBuilder(Page.find())
       .addConditionToExcludeRedirect()
       .addConditionToListOnlyDescendants(targetPage.path)
-      .addConditionToFilteringByViewer(user)
+      .addConditionToFilteringByViewer(user, userGroups)
       .query
       .lean()
       .cursor({ batchSize: BULK_REINDEX_SIZE });
@@ -556,12 +571,15 @@ class PageService {
    */
   async deleteCompletelyDescendantsWithStream(targetPage, user, options = {}) {
     const Page = this.crowi.model('Page');
+    const UserGroupRelation = this.crowi.model('UserGroupRelation');
+
+    const userGroups = await UserGroupRelation.findAllUserGroupIdsRelatedToUser(user);
     const { PageQueryBuilder } = Page;
 
     const readStream = new PageQueryBuilder(Page.find())
       .addConditionToExcludeRedirect()
       .addConditionToListOnlyDescendants(targetPage.path)
-      .addConditionToFilteringByViewer(user)
+      .addConditionToFilteringByViewer(user, userGroups)
       .query
       .lean()
       .cursor({ batchSize: BULK_REINDEX_SIZE });
@@ -682,12 +700,15 @@ class PageService {
    */
   async revertDeletedDescendantsWithStream(targetPage, user, options = {}) {
     const Page = this.crowi.model('Page');
+    const UserGroupRelation = this.crowi.model('UserGroupRelation');
+
+    const userGroups = await UserGroupRelation.findAllUserGroupIdsRelatedToUser(user);
     const { PageQueryBuilder } = Page;
 
     const readStream = new PageQueryBuilder(Page.find())
       .addConditionToExcludeRedirect()
       .addConditionToListOnlyDescendants(targetPage.path)
-      .addConditionToFilteringByViewer(user)
+      .addConditionToFilteringByViewer(user, userGroups)
       .query
       .lean()
       .cursor({ batchSize: BULK_REINDEX_SIZE });
